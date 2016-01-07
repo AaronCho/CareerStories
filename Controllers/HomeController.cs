@@ -15,21 +15,17 @@ namespace CareerStories.Controllers
 
         public ActionResult Careers()
         {
-            return View();
+            return RedirectToAction("Index", "Careers");
         }
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            return RedirectToAction("Index", "About");
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            return RedirectToAction("Index", "Contact");
         }
     }
 }
