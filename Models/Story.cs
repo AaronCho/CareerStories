@@ -12,6 +12,8 @@ namespace CareerStories.Models
 
         public string CareerStory { get; set; }
 
-        public DateTime PostDate { get; set; }     
+        public DateTime PostDate { get; set; }
+
+        public int isActive { get; set; }
     }
 }

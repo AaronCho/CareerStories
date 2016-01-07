@@ -11,5 +11,7 @@ namespace CareerStories.Models
 
         public string CareerName { get; set; }
         public string ImageUrl { get; set; }
+
+        public int isActive { get; set; }
     }
 }
