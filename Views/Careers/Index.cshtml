@@ -1,20 +1,38 @@
-﻿@{
+﻿@model CareerStories.Models.CareersViewModel
+
+@{
     ViewBag.Title = "Careers";
 }
 
 <div class="jumbotron">
     <p>
         Careers:
-        <select>
-            <option value="Administrative Assistant">Administrative Assistant</option>
-            <option value="Accountant">Accountant</option>
-            <option value="Pharmacist">Pharmacist</option>
-            <option value="High School Teacher">High School Teacher</option>
-        </select>
+        @Html.DropDownListFor(model => model.CareerName, Model.Careers)
+        @*@foreach (var item in Model)
+        {
+            <table>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CareerName)
+                    </td>
+                </tr>
+            </table>
+        }*@
     </p>
-    <input id="search-input" name="careerSearch" type="text">
+    <input id="searchInput" name="careerSearch" type="text">
     <a href="http://www.google.com" class="btn btn-primary btn-large">Search</a> <br />
 
+  @* @using (Html.BeginForm("Create", "Careers"))
+    {
+        USE PARTIAL VIEWS TO BECAUSE YOU CANT USE IENUMERABLE AND REGULAR MODEL. 
+       @Html.ValidationSummary(true) <!-- Theres other validation message stuff watch lynda 6.1-->
+        
+       @Html.EditorFor(model => model.CareerName)
+       @Html.ValidationMessageFor(model => model.CareerName)
+         
+       <input type="submit" class="btn btn-primary btn-large" value="Create" />
+    }*@
+    <p>@ViewBag.Message</p>
     <p>
         <img src="http://www.laspalomasrestaurant.com/wp-content/uploads/2015/03/adminassistant.jpg" alt="">
         Administrative Assistants assist executives in day to day tasks.

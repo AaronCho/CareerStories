@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
+
+namespace CareerStories.Models
+{
+    public class Stories
+    {
+        [Required]
+        public long Id { get; set; }
+
+        [Required]
+        public long CareerId { get; set; }
+
+        [Required]
+        public long StarCount { get; set; }
+
+        [Required]
+        public long PostCount { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        [StringLength(maximumLength: 20000, MinimumLength = 200)]
+        public string Story { get; set; }
+
+        [Required]
+        [DataType(DataType.DateTime)]
+        public DateTime PostDate { get; set; }
+
+        [Required]
+        public int IsActive { get; set; }
+    }
+}
