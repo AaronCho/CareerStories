@@ -7,7 +7,14 @@
 <div class="jumbotron">
     <p>
         Careers:
-        @Html.DropDownListFor(model => model.CareerName, Model.Careers)
+        
+        @*@Html.DropDownListFor(model => model.CareerName, Model.Careers) uses the viewmodel*@
+        @using (Html.BeginForm("Index", "Careers"))
+        {
+            @Html.Hidden("hiddenCareerName", (string)ViewBag.careersList.ElementAt(0).Selected)
+            @Html.DropDownList("careersList", null, new { @onchange = "this.form.submit()" })
+        }
+       
         @*@foreach (var item in Model)
         {
             <table>
@@ -22,9 +29,9 @@
     <input id="searchInput" name="careerSearch" type="text">
     <a href="http://www.google.com" class="btn btn-primary btn-large">Search</a> <br />
 
-  @* @using (Html.BeginForm("Create", "Careers"))
+   @*@using (Html.BeginForm("Create", "Careers"))
     {
-        USE PARTIAL VIEWS TO BECAUSE YOU CANT USE IENUMERABLE AND REGULAR MODEL. 
+        USE PARTIAL VIEWS TO BECAUSE YOU CANT USE IENUMERABLE AND REGULAR MODEL.
        @Html.ValidationSummary(true) <!-- Theres other validation message stuff watch lynda 6.1-->
         
        @Html.EditorFor(model => model.CareerName)

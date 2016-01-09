@@ -16,7 +16,11 @@ namespace CareerStories.Models
         [StringLength(maximumLength: 100, MinimumLength = 1)]
         public string CareerName { get; set; }
 
+        [StringLength(maximumLength: 1000, MinimumLength = 0)]
         public string ImageUrl { get; set; }
+
+        [StringLength(maximumLength: 10000, MinimumLength = 0)]
+        public string Description { get; set; }
 
         [Required]
         public int IsActive { get; set; }

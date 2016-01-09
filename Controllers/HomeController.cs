@@ -13,7 +13,8 @@ namespace CareerStories.Controllers
             return View();
         }
 
-        public ActionResult Careers()
+        //////////you can delete if you want/////////////////
+        /*public ActionResult Careers()
         {
             return RedirectToAction("Index", "Careers");
         }
@@ -26,6 +27,6 @@ namespace CareerStories.Controllers
         public ActionResult Contact()
         {
             return RedirectToAction("Index", "Contact");
-        }
+        }*/
     }
 }

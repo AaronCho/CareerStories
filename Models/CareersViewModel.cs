@@ -10,7 +10,7 @@ namespace CareerStories.Models
     {
         public string CareerName { get; set; }
         public SelectList Careers { get; set; }
-
-        //add imageurl
+        public string Description { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

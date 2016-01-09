@@ -11,17 +11,49 @@ namespace CareerStories.Controllers
     {
         //
         // GET: /Careers/
+        [HttpGet]
         public ActionResult Index()
         {
             var db = new CareersDataContext();
             //var careersArray = db.Careers.ToArray(); //The ToArray executes the SQL call.
-            var careersArray = db.Careers.Where(u => u.IsActive == 1).Select(u => u.CareerName);
-            SelectList careers = new SelectList(careersArray); //change the array to a select list
+            /*var careersArray = db.Careers.Where(u => u.IsActive == 1).Select(u => u.CareerName);
+            var careersIdArray = db.Careers.Where(u => u.IsActive == 1).Select(u => u.Id);
+            SelectList careers = new SelectList(careersArray); //change the array to a select list*/
 
             var careersViewModel = new CareersViewModel();
-            careersViewModel.Careers = careers;
-            
+            //careersViewModel.Careers = careers;
+
+            ///////////////////////////////////
+            var list = db.Careers.ToList();
+            List<SelectListItem> careersList = new List<SelectListItem>();
+
+            for (int i = 0; i < list.Count(); i++)
+            {
+                careersList.Add(new SelectListItem
+                {
+                    Text = list.ElementAt(i).CareerName,
+                    Value = list.ElementAt(i).Id.ToString()
+                });
+            }
+
+            careersList.ElementAt(0).Selected = true;
+            ViewBag.careersList = careersList;
+
+
+            //////////////////////////////////
+
             return View(careersViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Index(string hiddenCareerName)
+        {
+            return Redirect(@"~\" + "careers/" + hiddenCareerName);
+        }
+
+        public ActionResult DdlUpdate()
+        {
+            return View("Index");
         }
 
         [HttpGet]
@@ -36,8 +68,8 @@ namespace CareerStories.Controllers
             ViewBag.Message = careers.CareerName;
 
             careers.ImageUrl = "";
+            careers.Description = "";
             careers.IsActive = 1;
-
             if (ModelState.IsValid)
             {
                 //Save to Database

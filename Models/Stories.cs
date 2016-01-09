@@ -21,10 +21,12 @@ namespace CareerStories.Models
         public long PostCount { get; set; }
 
         [Required]
-        [DataType(DataType.Text)]
         [StringLength(maximumLength: 20000, MinimumLength = 200)]
         public string Story { get; set; }
 
+        public string Education { get; set; }
+
+        public string Company { get; set; }
         [Required]
         [DataType(DataType.DateTime)]
         public DateTime PostDate { get; set; }
