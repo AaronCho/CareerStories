@@ -7,11 +7,10 @@
 <div class="jumbotron">
     <p>
         Careers:
-        
+        @Html.ActionLink("Create Story","Index","Careers")
         @*@Html.DropDownListFor(model => model.CareerName, Model.Careers) uses the viewmodel*@
         @using (Html.BeginForm("Index", "Careers"))
         {
-            @Html.Hidden("hiddenCareerName", (string)ViewBag.careersList.ElementAt(0).Selected)
             @Html.DropDownList("careersList", null, new { @onchange = "this.form.submit()" })
         }
        
@@ -41,8 +40,8 @@
     }*@
     <p>@ViewBag.Message</p>
     <p>
-        <img src="http://www.laspalomasrestaurant.com/wp-content/uploads/2015/03/adminassistant.jpg" alt="">
-        Administrative Assistants assist executives in day to day tasks.
+        @*<img src="@Url.Content(Model.ImageUrl)" alt=""> the url.content breaks page if imageurl is null (contentpath).  maybe dont use imageurl*@
+        @Html.Encode(Model.Description)
     </p>
     <p><h1>Stories:</h1></p>
     <div class="row">

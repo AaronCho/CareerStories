@@ -15,6 +15,9 @@ namespace CareerStories.Models
         public long StoryId { get; set; }
 
         [Required]
+        public long UserId { get; set; }
+
+        [Required]
         public long ReplyCount { get; set; }
 
         [Required]

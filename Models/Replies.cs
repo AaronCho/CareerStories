@@ -15,6 +15,9 @@ namespace CareerStories.Models
         public long PostId { get; set; }
 
         [Required]
+        public long UserId { get; set; }
+
+        [Required]
         [DataType(DataType.Text)]
         [StringLength(maximumLength: 5000, MinimumLength = 1)]
         public string Reply { get; set; }

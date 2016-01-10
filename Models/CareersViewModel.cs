@@ -9,7 +9,6 @@ namespace CareerStories.Models
     public class CareersViewModel
     {
         public string CareerName { get; set; }
-        public SelectList Careers { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }
     }
