@@ -1,0 +1,32 @@
+﻿@model CareerStories.Models.StoriesViewModel
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class = "jumbotron">
+    @using (Html.BeginForm("Create", "Careers"))
+    {
+        <p>
+            Write your story.  Stories should be descriptive and give others inside information about your career.
+        </p>
+        @Html.ValidationSummary(true) <!-- Theres other validation message stuff watch lynda 6.1-->
+
+        @Html.Label("Title: ")
+        @Html.EditorFor(model => model.Title)
+        @Html.ValidationMessageFor(model => model.Title) <br />
+
+        @Html.Label("Education: ")
+        @Html.EditorFor(model => model.Education)
+        @Html.ValidationMessageFor(model => model.Education) <br />
+
+        @Html.Label("Company: ")
+        @Html.EditorFor(model => model.Company)
+        @Html.ValidationMessageFor(model => model.Company) <br />
+
+        @Html.Label("Story: ")
+        @Html.TextAreaFor(model => model.Story, 20, 30, htmlAttributes: new { style = "width: 100%; max-width: 100%;" }) @*The 20 and 30 are the sizes*@
+        @Html.ValidationMessageFor(model => model.Story) <br />
+
+        <input type="submit" class="btn btn-primary btn-large" value="Create" />
+    }
+</div>

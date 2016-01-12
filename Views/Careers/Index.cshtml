@@ -7,24 +7,26 @@
 <div class="jumbotron">
     <p>
         Careers:
-        @Html.ActionLink("Create Story","Index","Careers")
-        @*@Html.DropDownListFor(model => model.CareerName, Model.Careers) uses the viewmodel*@
-        @using (Html.BeginForm("Index", "Careers"))
-        {
-            @Html.DropDownList("careersList", null, new { @onchange = "this.form.submit()" })
-        }
-       
-        @*@foreach (var item in Model)
-        {
-            <table>
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CareerName)
-                    </td>
-                </tr>
-            </table>
-        }*@
-    </p>
+
+            @Html.ActionLink("New Story", "Create", "Careers", null, new { @class = "btn btn-primary btn-large" })
+            <!--Difference between actionlink and routelink: http://stackoverflow.com/questions/864827/whats-the-difference-between-routelink-and-actionlink-in-asp-net-mvc-->
+            @*@Html.DropDownListFor(model => model.CareerName, Model.Careers) uses the viewmodel*@
+            @using (Html.BeginForm("Index", "Careers"))
+            {
+                @Html.DropDownList("careersList", null, new { @onchange = "this.form.submit()" })
+            }
+
+            @*@foreach (var item in Model)
+            {
+                <table>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CareerName)
+                        </td>
+                    </tr>
+                </table>
+            }*@
+</p>
     <input id="searchInput" name="careerSearch" type="text">
     <a href="http://www.google.com" class="btn btn-primary btn-large">Search</a> <br />
 

@@ -99,32 +99,45 @@ namespace CareerStories.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return View("Index");
+            return View();
         }
 
         [HttpPost]
-        public ActionResult Create([Bind(Exclude="Id, ImageUrl, IsActive")]Careers careers) //Look into ViewModels, more work but may be worth it.
+        public ActionResult Create(StoriesViewModel viewModelStories) //Look into ViewModels, more work but may be worth it.
         {
-            ViewBag.Message = careers.CareerName;
+            Stories stories = new Stories();
 
-            careers.ImageUrl = "";
-            careers.Description = "";
-            careers.IsActive = 1;
+            stories.Title = viewModelStories.Title;
+            stories.Education = viewModelStories.Education;
+            stories.Company = viewModelStories.Company;
+            stories.Story = viewModelStories.Story;
+            stories.PostDate = viewModelStories.PostDate;
+
+            stories.CareerId = 1; //MUST CHANGE to current career id!
+            stories.UserId = 5; //MUST CHANGE to current user id!
+
+            stories.StarCount = 0;
+            stories.PostCount = 0;
+            stories.FunnyCount = 0;
+            stories.InformativeCount = 0;
+            stories.IsActive = 1;
+
             if (ModelState.IsValid)
             {
                 //Save to Database
                 var db = new CareersDataContext();
-                db.Careers.Add(careers);
+                db.Stories.Add(stories);
                 db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
+            //else, you should return to the create view with the user's story and other info prepopulated
 
             return Create(); //returns to the Get Create action
         }
 
 
-        //Different Functions 
+        //Different Functions.  change location of this to global or something so that the home controller can use this function also.  or include this controller. 
         public static string URLFriendly(string title)
         {
             if (title == null) return "";

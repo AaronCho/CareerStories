@@ -9,5 +9,7 @@ namespace CareerStories.Models
     public class CareersDataContext : DbContext
     {
         public DbSet<Careers> Careers { get; set; }
+
+        public DbSet<Stories> Stories { get; set; }
     }
 }
