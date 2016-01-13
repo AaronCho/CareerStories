@@ -50,7 +50,8 @@ namespace CareerStories.Controllers
                 careerNameUrl = careerNameUrl.Replace("-", " ");
             }
            
-            var list = db.Careers.ToList();
+            //var list = db.Careers.ToList();
+            var list = db.Careers.Where(u => u.IsActive == 1).ToList();
             List<SelectListItem> careersList = new List<SelectListItem>();
 
             for (int i = 0; i < list.Count(); i++)
@@ -91,11 +92,6 @@ namespace CareerStories.Controllers
             return Redirect(@"~\" + "careers/" + selected);
         }
 
-        public ActionResult DdlUpdate()
-        {
-            return View("Index");
-        }
-
         [HttpGet]
         public ActionResult Create()
         {
@@ -111,16 +107,20 @@ namespace CareerStories.Controllers
             stories.Education = viewModelStories.Education;
             stories.Company = viewModelStories.Company;
             stories.Story = viewModelStories.Story;
-            stories.PostDate = viewModelStories.PostDate;
 
-            stories.CareerId = 1; //MUST CHANGE to current career id!
+            stories.CareerId = getCareerId(RouteData.Values["careerName"].ToString().Replace("-", " ")); 
             stories.UserId = 5; //MUST CHANGE to current user id!
 
+            stories.PostDate = DateTime.Now; //account for time difference
             stories.StarCount = 0;
             stories.PostCount = 0;
             stories.FunnyCount = 0;
             stories.InformativeCount = 0;
             stories.IsActive = 1;
+
+            if (stories.Title == null) stories.Title = "";
+            if (stories.Education == null) stories.Education = "";
+            if (stories.Company == null) stories.Company = "";
 
             if (ModelState.IsValid)
             {
@@ -129,13 +129,41 @@ namespace CareerStories.Controllers
                 db.Stories.Add(stories);
                 db.SaveChanges();
 
-                return RedirectToAction("Index");
+                var id = stories.Id; //grabs the recently added story's id.
+
+                //use StringBuilder here for optimization
+                return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString() + "/" + id + "/" + stories.Title);
             }
-            //else, you should return to the create view with the user's story and other info prepopulated
 
             return Create(); //returns to the Get Create action
         }
 
+        [HttpGet]
+        public ActionResult Story()
+        {
+            //sanitize url for careername (again), id, AND slug.
+
+            return View();
+        }
+
+        [HttpPost]
+        [ActionName("Story")]
+        public ActionResult StoryPost()
+        {
+            return View();
+        }
+
+        public static long getCareerId(string careerName)
+        {
+            long careerId = 1;
+
+            var db = new CareersDataContext();
+            var careers = db.Careers.Where(x => string.Equals(x.CareerName, careerName)).ToArray();
+
+            careerId = careers[0].Id;
+
+            return careerId;
+        }
 
         //Different Functions.  change location of this to global or something so that the home controller can use this function also.  or include this controller. 
         public static string URLFriendly(string title)
