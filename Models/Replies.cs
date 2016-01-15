@@ -19,7 +19,7 @@ namespace CareerStories.Models
 
         [Required]
         [DataType(DataType.Text)]
-        [StringLength(maximumLength: 5000, MinimumLength = 1)]
+        [StringLength(maximumLength: 5000, MinimumLength = 3)]
         public string Reply { get; set; }
     }
 }

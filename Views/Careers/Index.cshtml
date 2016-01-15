@@ -43,7 +43,7 @@
     <p>@ViewBag.Message</p>
     <p>
         @*<img src="@Url.Content(Model.ImageUrl)" alt=""> the url.content breaks page if imageurl is null (contentpath).  maybe dont use imageurl*@
-        @Html.Encode(Model.Description)
+        @Html.Raw(Model.Description)
     </p>
     <p><h1>Stories:</h1></p>
     <div class="row">

@@ -1,7 +1,12 @@
-﻿
+﻿@model CareerStories.Models.StoriesViewModel
 @{
     ViewBag.Title = "Story";
 }
 
-<h2>Story</h2>
-
+<div class="jumbotron">
+    @Html.Raw(Model.Title) <br />
+    @Html.Raw(Model.Education) <br />
+    @Html.Raw(Model.Company) <br />
+    @Html.Raw(Model.Story) <br />
+    @Html.Raw(Model.PostDate) <br />
+</div>

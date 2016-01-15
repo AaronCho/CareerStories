@@ -99,7 +99,7 @@ namespace CareerStories.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(StoriesViewModel viewModelStories) //Look into ViewModels, more work but may be worth it.
+        public ActionResult Create(StoriesCreateViewModel viewModelStories) //Look into ViewModels, more work but may be worth it.
         {
             Stories stories = new Stories();
 
@@ -141,16 +141,69 @@ namespace CareerStories.Controllers
         [HttpGet]
         public ActionResult Story()
         {
-            //sanitize url for careername (again), id, AND slug.
+            if (RouteData.Values["slug"] == null)
+            {
+                return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString());
+            }
 
-            return View();
+            //sanitize url for careername (again), id, AND slug.
+            string inputUrlParam;
+            string cleanUrlParam;
+
+            inputUrlParam = RouteData.Values["careerName"].ToString();
+            cleanUrlParam = URLFriendly(inputUrlParam);
+
+            if (!inputUrlParam.Equals(cleanUrlParam))
+            {//use StringBuilder here for optimization
+                return Redirect(@"~\" + "careers/" + cleanUrlParam + "/" + RouteData.Values["Id"].ToString() + "/"
+                    + RouteData.Values["slug"].ToString());
+            }
+
+            inputUrlParam = RouteData.Values["slug"].ToString();
+            cleanUrlParam = URLFriendly(inputUrlParam);
+
+            if (!inputUrlParam.Equals(cleanUrlParam))
+            {//use StringBuilder here for optimization
+                return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString() + "/" + RouteData.Values["Id"].ToString() + "/"
+                    + cleanUrlParam);
+            }
+
+            var db = new CareersDataContext();
+            var storiesViewModel = new StoriesViewModel();
+            long inputId = Int64.Parse(RouteData.Values["Id"].ToString());
+            var story = db.Stories.Where(x => x.Id == inputId).ToArray();
+
+            if (story.Length < 1)
+            {//wrong id
+                return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString()); 
+            }
+
+            storiesViewModel.StarCount = story[0].StarCount;
+            storiesViewModel.PostCount = story[0].PostCount;
+            storiesViewModel.FunnyCount = story[0].FunnyCount;
+            storiesViewModel.InformativeCount = story[0].InformativeCount;
+            storiesViewModel.Story = story[0].Story;
+            storiesViewModel.Title = story[0].Title;
+            storiesViewModel.Education = story[0].Education;
+            storiesViewModel.Company = story[0].Company;
+            storiesViewModel.PostDate = story[0].PostDate;
+            
+            ///////////////////////////////
+            /*Posts and Replies: use the inputId variable to find corresponding posts and replies.  Add them to ViewBag variables and display them 
+             * in the View.
+             * */
+
+            ///////////////////////////////
+            return View(storiesViewModel);
         }
 
         [HttpPost]
         [ActionName("Story")]
         public ActionResult StoryPost()
         {
-            return View();
+            //Add post/reply to db.
+
+            return Story(); //return the getStory action so that the new reply or post will be shown.
         }
 
         public static long getCareerId(string careerName)
