@@ -1,0 +1,9 @@
+﻿@model CareerStories.Models.PostsViewModel
+
+@Html.ValidationSummary(true)
+
+@Html.TextAreaFor(model => model.Post, 20, 30, htmlAttributes: new { style = "width: 50%; max-width: 50%;" }) @*The 20 and 30 are the sizes*@
+@Html.ValidationMessageFor(model => model.Post) <br />
+
+<input type="submit" class="btn btn-primary btn-large" value="Post" />
+

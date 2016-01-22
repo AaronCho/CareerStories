@@ -10,4 +10,24 @@
     @Html.Raw(Model.Company) <br />
     @Html.Raw(Model.Story) <br />
     @Html.Raw(Model.PostDate) <br />
+    Comments: <br />
+    @foreach (var item in ViewBag.PostsList)
+    {
+        <table>
+            <tr>
+                <td>
+                    @item.PostDate
+                </td>
+                <td>
+                    @item.Post
+                </td>
+            </tr>
+        </table>
+    }
+
+    @using (Html.BeginForm("Story", "Careers"))
+    {
+        var PostsViewModel = new CareerStories.Models.PostsViewModel();
+        @Html.Partial("_PostComment", PostsViewModel)
+    }
 </div>

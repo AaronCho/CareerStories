@@ -21,8 +21,18 @@ namespace CareerStories.Models
         public long ReplyCount { get; set; }
 
         [Required]
+        public long LikeCount { get; set; }
+
+        [Required]
+        [DataType(DataType.DateTime)]
+        public DateTime PostDate { get; set; }
+
+        [Required]
         [DataType(DataType.Text)]
         [StringLength(maximumLength: 5000, MinimumLength = 3)]
         public string Post { get; set; }
+
+        [Required]
+        public int IsActive { get; set; }
     }
 }

@@ -11,5 +11,9 @@ namespace CareerStories.Models
         public DbSet<Careers> Careers { get; set; }
 
         public DbSet<Stories> Stories { get; set; }
+
+        public DbSet<Posts> Posts { get; set; }
+
+        public DbSet<Replies> Replies { get; set; }
     }
 }

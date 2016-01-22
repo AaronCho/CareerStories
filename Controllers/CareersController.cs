@@ -258,13 +258,8 @@ namespace CareerStories.Controllers
                     + RouteData.Values["slug"].ToString());
             }
 
-            inputUrlParam = RouteData.Values["slug"].ToString();
-            cleanUrlParam = URLFriendly(inputUrlParam);
-
-            if (!inputUrlParam.Equals(cleanUrlParam))
-            {//use StringBuilder here for optimization
-                return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString() + "/" + RouteData.Values["Id"].ToString() + "/"
-                    + cleanUrlParam);
+            if (!RouteData.Values["slug"].ToString().Equals(getSlug(Int64.Parse(RouteData.Values["Id"].ToString())))) {
+                return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString() + "/" + RouteData.Values["Id"].ToString() + "/" + getSlug(Int64.Parse(RouteData.Values["Id"].ToString())));
             }
 
             var db = new CareersDataContext();
@@ -292,45 +287,51 @@ namespace CareerStories.Controllers
             /*Posts and Replies: use the inputId variable to find corresponding posts and replies.  Add them to ViewBag variables and display them 
              * in the View.
              * */
-
+            var PostsList = db.Posts.Where(u => u.IsActive == 1 && u.StoryId == inputId).OrderBy(u => u.PostDate).ToList();
+            ViewBag.PostsList = PostsList;
             ///////////////////////////////
             return View(storiesViewModel);
         }
 
         [HttpPost]
         [ActionName("Story")]
-        public ActionResult StoryPost()
+        public ActionResult StoryPost(PostsViewModel viewModelPosts)
         {
-            if (RouteData.Values["slug"] == null)
+           //Don't do any redirects, the slug is null when form is posted.
+
+            Posts posts = new Posts();
+            posts.StoryId = Int64.Parse(RouteData.Values["Id"].ToString()); //what if user changes id parameter in url then presses post??
+            posts.UserId = 5;
+            posts.ReplyCount = 0;
+            posts.LikeCount = 0;
+            posts.PostDate = DateTime.Now;
+            posts.Post = viewModelPosts.Post;
+            posts.IsActive = 1;
+
+            if (ModelState.IsValid)
             {
-                return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString());
+                //Save to Database
+                var db = new CareersDataContext();
+                db.Posts.Add(posts);
+                db.SaveChanges();
+
+                //use StringBuilder here for optimization
+                return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString() + "/" + RouteData.Values["Id"].ToString() + "/" + getSlug(posts.StoryId));
             }
-
-            //sanitize url for careername (again), id, AND slug.
-            string inputUrlParam;
-            string cleanUrlParam;
-
-            inputUrlParam = RouteData.Values["careerName"].ToString();
-            cleanUrlParam = URLFriendly(inputUrlParam);
-
-            if (!inputUrlParam.Equals(cleanUrlParam))
-            {//use StringBuilder here for optimization
-                return Redirect(@"~\" + "careers/" + cleanUrlParam + "/" + RouteData.Values["Id"].ToString() + "/"
-                    + RouteData.Values["slug"].ToString());
-            }
-
-            inputUrlParam = RouteData.Values["slug"].ToString();
-            cleanUrlParam = URLFriendly(inputUrlParam);
-
-            if (!inputUrlParam.Equals(cleanUrlParam))
-            {//use StringBuilder here for optimization
-                return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString() + "/" + RouteData.Values["Id"].ToString() + "/"
-                    + cleanUrlParam);
-            }
-
-            //Add post/reply to db.
 
             return Story(); //return the getStory action so that the new reply or post will be shown.
+        }
+
+        public static string getSlug(long StoryId)
+        {
+            string slug = "";
+
+            var db = new CareersDataContext();
+            var stories = db.Stories.Where(x => x.Id == StoryId).ToArray();
+
+            slug = stories[0].Title;
+
+            return slug;
         }
 
         public static long getCareerId(string careerName)
