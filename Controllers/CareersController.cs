@@ -209,6 +209,7 @@ namespace CareerStories.Controllers
             stories.CareerId = getCareerId(RouteData.Values["careerName"].ToString().Replace("-", " "));
             stories.CareerName = RouteData.Values["careerName"].ToString().Replace("-", " ");
             stories.UserId = 5; //MUST CHANGE to current user id!
+            stories.Username = "aaron";
 
             stories.PostDate = DateTime.Now; //account for time difference
             stories.StarCount = 0;
@@ -242,7 +243,7 @@ namespace CareerStories.Controllers
         {
             if (RouteData.Values["slug"] == null)
             {
-                return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString());
+                return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString() + "/" + RouteData.Values["Id"].ToString() + "/" + getSlug(Int64.Parse(RouteData.Values["Id"].ToString())));
             }
 
             //sanitize url for careername (again), id, AND slug.
@@ -257,6 +258,15 @@ namespace CareerStories.Controllers
                 return Redirect(@"~\" + "careers/" + cleanUrlParam + "/" + RouteData.Values["Id"].ToString() + "/"
                     + RouteData.Values["slug"].ToString());
             }
+
+            /*inputUrlParam = RouteData.Values["slug"].ToString();
+            cleanUrlParam = URLFriendly(inputUrlParam);
+
+            if (!inputUrlParam.Equals(cleanUrlParam))
+            {//use StringBuilder here for optimization
+                return Redirect(@"~\" + "careers/" + cleanUrlParam + "/" + RouteData.Values["Id"].ToString() + "/"
+                    + RouteData.Values["slug"].ToString());
+            }*/
 
             if (!RouteData.Values["slug"].ToString().Equals(getSlug(Int64.Parse(RouteData.Values["Id"].ToString())))) {
                 return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString() + "/" + RouteData.Values["Id"].ToString() + "/" + getSlug(Int64.Parse(RouteData.Values["Id"].ToString())));
@@ -302,6 +312,7 @@ namespace CareerStories.Controllers
             Posts posts = new Posts();
             posts.StoryId = Int64.Parse(RouteData.Values["Id"].ToString()); //what if user changes id parameter in url then presses post??
             posts.UserId = 5;
+            posts.Username = "aaron";
             posts.ReplyCount = 0;
             posts.LikeCount = 0;
             posts.PostDate = DateTime.Now;
@@ -330,6 +341,7 @@ namespace CareerStories.Controllers
             var stories = db.Stories.Where(x => x.Id == StoryId).ToArray();
 
             slug = stories[0].Title;
+            slug = URLFriendly(slug);
 
             return slug;
         }

@@ -17,6 +17,8 @@ namespace CareerStories.Models
 
         public long InformativeCount { get; set; }
 
+        public string Username { get; set; }
+
         public string Story { get; set; }
 
         public string Title { get; set; }

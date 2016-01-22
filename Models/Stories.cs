@@ -35,6 +35,9 @@ namespace CareerStories.Models
         public long UserId { get; set; }
 
         [Required]
+        public string Username { get; set; }
+
+        [Required]
         [StringLength(maximumLength: 20000, MinimumLength = 200)]
         public string Story { get; set; }
 

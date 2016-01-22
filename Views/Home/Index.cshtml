@@ -35,26 +35,16 @@
         </div>
     </div>
 
-    @foreach (var item in ViewBag.careerStoriesList)
+    @foreach (var item in ViewBag.careerStoriesListHome as List<CareerStories.Models.Stories>)
     {
+        @*Try Url.Action again for formatting with <a> and <td>*@
+        @*USE THIS: http://stackoverflow.com/questions/9584673/html-actionlink-and-html-displayfor-at-the-same-time-not-right-but-it-descri*@
         <table>
             <tr>
                 <td>
-                    @item.StarCount stars
-                </td>
-                <td>
-                    @item.CareerName
-                </td>
-                <td>
-                    @item.Title
-                </td>
-                <td>
-                    @item.PostDate
-                </td>
-                <td>
-                    @item.PostCount
+                    @Html.ActionLink(item.StarCount + "stars" + "\t" + item.CareerName + "\t" + item.Title + "\t" + item.PostDate + "\t" + item.PostCount + " comments", "Story", "Careers", new { Id = item.Id }, null /* html attributes */)
                 </td>
             </tr>
         </table>
-    }
+    }  
 </div>

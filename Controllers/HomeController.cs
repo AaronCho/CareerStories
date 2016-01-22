@@ -13,7 +13,7 @@ namespace CareerStories.Controllers
         {
             var db = new CareersDataContext();
             var careerStoriesList = db.Stories.Where(u => u.IsActive == 1).OrderByDescending(u => u.StarCount).ToList();
-            ViewBag.careerStoriesList = careerStoriesList;
+            ViewBag.careerStoriesListHome = careerStoriesList;
 
             return View();
         }

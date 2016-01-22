@@ -9,6 +9,8 @@ namespace CareerStories.Models
     {
         public long LikeCount { get; set; }
 
+        public string Username { get; set; }
+
         public string Reply { get; set; }
     }
 }

@@ -12,34 +12,14 @@
             <!--Difference between actionlink and routelink: http://stackoverflow.com/questions/864827/whats-the-difference-between-routelink-and-actionlink-in-asp-net-mvc-->
             @*@Html.DropDownListFor(model => model.CareerName, Model.Careers) uses the viewmodel*@
             @using (Html.BeginForm("Index", "Careers"))
+            
             {
                 @Html.DropDownList("careersList", null, new { @onchange = "this.form.submit()" })
-            }
-
-            @*@foreach (var item in Model)
-            {
-                <table>
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CareerName)
-                        </td>
-                    </tr>
-                </table>
-            }*@
+            }         
 </p>
     <input id="searchInput" name="careerSearch" type="text">
     <a href="http://www.google.com" class="btn btn-primary btn-large">Search</a> <br />
 
-   @*@using (Html.BeginForm("Create", "Careers"))
-    {
-        USE PARTIAL VIEWS TO BECAUSE YOU CANT USE IENUMERABLE AND REGULAR MODEL.
-       @Html.ValidationSummary(true) <!-- Theres other validation message stuff watch lynda 6.1-->
-        
-       @Html.EditorFor(model => model.CareerName)
-       @Html.ValidationMessageFor(model => model.CareerName)
-         
-       <input type="submit" class="btn btn-primary btn-large" value="Create" />
-    }*@
     <p>@ViewBag.Message</p>
     <p>
         @*<img src="@Url.Content(Model.ImageUrl)" alt=""> the url.content breaks page if imageurl is null (contentpath).  maybe dont use imageurl*@
@@ -64,26 +44,17 @@
         </div>
     </div>
 
-    @foreach (var item in ViewBag.careerStoriesList)
-        {
+    @foreach (var item in ViewBag.careerStoriesList as List<CareerStories.Models.Stories>)
+    {
+        @*Try Url.Action again for formatting with <a> and <td>*@
+        @*USE THIS: http://stackoverflow.com/questions/9584673/html-actionlink-and-html-displayfor-at-the-same-time-not-right-but-it-descri*@
         <table>
             <tr>
                 <td>
-                    @item.StarCount stars
-                </td>
-                <td>
-                    @item.CareerName
-                </td>
-                <td>
-                    @item.Title
-                </td>
-                <td>
-                    @item.PostDate
-                </td>
-                <td>
-                    @item.PostCount comments
+                    @Html.ActionLink(item.StarCount + "stars" + "\t" + item.CareerName + "\t" + item.Title + "\t" + item.PostDate + "\t" + item.PostCount + " comments", "Story", "Careers", new { Id = item.Id }, null /* html attributes */)
                 </td>
             </tr>
-        </table>
-        }
+        </table>       
+    }  
+        
 </div>
