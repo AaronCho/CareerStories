@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CareerStories.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,23 +11,11 @@ namespace CareerStories.Controllers
     {
         public ActionResult Index()
         {
+            var db = new CareersDataContext();
+            var careerStoriesList = db.Stories.Where(u => u.IsActive == 1).OrderByDescending(u => u.StarCount).ToList();
+            ViewBag.careerStoriesList = careerStoriesList;
+
             return View();
         }
-
-        //////////you can delete if you want/////////////////
-        /*public ActionResult Careers()
-        {
-            return RedirectToAction("Index", "Careers");
-        }
-
-        public ActionResult About()
-        {
-            return RedirectToAction("Index", "About");
-        }
-
-        public ActionResult Contact()
-        {
-            return RedirectToAction("Index", "Contact");
-        }*/
     }
 }

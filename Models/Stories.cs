@@ -15,6 +15,11 @@ namespace CareerStories.Models
         public long CareerId { get; set; }
 
         [Required]
+        [DataType(DataType.Text)]
+        [StringLength(maximumLength: 100, MinimumLength = 1)]
+        public string CareerName { get; set; }
+
+        [Required]
         public long StarCount { get; set; }
 
         [Required]

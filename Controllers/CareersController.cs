@@ -51,6 +51,7 @@ namespace CareerStories.Controllers
             }
            
             //var list = db.Careers.ToList();
+            long careerId = 1;
             var list = db.Careers.Where(u => u.IsActive == 1).ToList();
             List<SelectListItem> careersList = new List<SelectListItem>();
 
@@ -71,6 +72,9 @@ namespace CareerStories.Controllers
                     careersViewModel.CareerName = list.ElementAt(i).CareerName;
                     careersViewModel.Description = list.ElementAt(i).Description;
                     careersViewModel.ImageUrl = list.ElementAt(i).ImageUrl;
+
+                    //set careerId to use in the list of stories below.
+                    careerId = list.ElementAt(i).Id;
                 }
             }
 
@@ -80,6 +84,10 @@ namespace CareerStories.Controllers
             {
                 return Redirect("/careers/administrative-assistant"); //anything after careers/ that is not valid will be redirected to aa.
             }
+
+            //get stories from selected career, sort, and put in viewbag.
+            var careerStoriesList = db.Stories.Where(u => u.IsActive == 1 && u.CareerId == careerId).OrderByDescending(u => u.StarCount).ToList();
+            ViewBag.careerStoriesList = careerStoriesList;
 
             return View(careersViewModel);
         }
@@ -95,12 +103,102 @@ namespace CareerStories.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            //sanitize url
+            string inputUrlParam;
+            string cleanUrlParam;
+
+            if (RouteData.Values["careerName"] == null)
+            {
+                return Redirect("/careers/administrative-assistant");
+            }
+            else
+            {
+                inputUrlParam = RouteData.Values["careerName"].ToString();
+                cleanUrlParam = URLFriendly(inputUrlParam);
+
+                if (!inputUrlParam.Equals(cleanUrlParam))
+                {
+                    return Redirect(cleanUrlParam);
+                }
+            }
+
+            bool careerNameUrlFound = false;
+
+            string careerNameUrl = "";
+            if (RouteData.Values["careerName"] != null)
+            {
+                careerNameUrl = RouteData.Values["careerName"].ToString();
+                careerNameUrl = careerNameUrl.Replace("-", " ");
+            }
+
+            var db = new CareersDataContext();
+            var list = db.Careers.Where(u => u.IsActive == 1).ToList();
+
+            for (int i = 0; i < list.Count(); i++)
+            {
+                if (list.ElementAt(i).CareerName.ToLower().Equals(careerNameUrl))
+                {
+                    careerNameUrlFound = true;
+                }
+            }
+
+            if (!careerNameUrlFound)
+            {
+                return Redirect("/careers/administrative-assistant"); //anything after careers/ that is not valid will be redirected to aa.
+            }
+            ////////////////////////end redirect check/////////////////////////////////////////////
+
             return View();
         }
 
         [HttpPost]
         public ActionResult Create(StoriesCreateViewModel viewModelStories) //Look into ViewModels, more work but may be worth it.
         {
+            //sanitize url
+            string inputUrlParam;
+            string cleanUrlParam;
+
+            if (RouteData.Values["careerName"] == null)
+            {
+                return Redirect("/careers/administrative-assistant");
+            }
+            else
+            {
+                inputUrlParam = RouteData.Values["careerName"].ToString();
+                cleanUrlParam = URLFriendly(inputUrlParam);
+
+                if (!inputUrlParam.Equals(cleanUrlParam))
+                {
+                    return Redirect(cleanUrlParam);
+                }
+            }
+
+            bool careerNameUrlFound = false;
+
+            string careerNameUrl = "";
+            if (RouteData.Values["careerName"] != null)
+            {
+                careerNameUrl = RouteData.Values["careerName"].ToString();
+                careerNameUrl = careerNameUrl.Replace("-", " ");
+            }
+
+            var db = new CareersDataContext();
+            var list = db.Careers.Where(u => u.IsActive == 1).ToList();
+
+            for (int i = 0; i < list.Count(); i++)
+            {
+                if (list.ElementAt(i).CareerName.ToLower().Equals(careerNameUrl))
+                {
+                    careerNameUrlFound = true;
+                }
+            }
+
+            if (!careerNameUrlFound)
+            {
+                return Redirect("/careers/administrative-assistant"); //anything after careers/ that is not valid will be redirected to aa.
+            }
+            ////////////////////////end redirect check/////////////////////////////////////////////
+
             Stories stories = new Stories();
 
             stories.Title = viewModelStories.Title;
@@ -108,7 +206,8 @@ namespace CareerStories.Controllers
             stories.Company = viewModelStories.Company;
             stories.Story = viewModelStories.Story;
 
-            stories.CareerId = getCareerId(RouteData.Values["careerName"].ToString().Replace("-", " ")); 
+            stories.CareerId = getCareerId(RouteData.Values["careerName"].ToString().Replace("-", " "));
+            stories.CareerName = RouteData.Values["careerName"].ToString().Replace("-", " ");
             stories.UserId = 5; //MUST CHANGE to current user id!
 
             stories.PostDate = DateTime.Now; //account for time difference
@@ -125,7 +224,7 @@ namespace CareerStories.Controllers
             if (ModelState.IsValid)
             {
                 //Save to Database
-                var db = new CareersDataContext();
+                db = new CareersDataContext();
                 db.Stories.Add(stories);
                 db.SaveChanges();
 
@@ -178,6 +277,7 @@ namespace CareerStories.Controllers
                 return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString()); 
             }
 
+            storiesViewModel.CareerName = story[0].CareerName;
             storiesViewModel.StarCount = story[0].StarCount;
             storiesViewModel.PostCount = story[0].PostCount;
             storiesViewModel.FunnyCount = story[0].FunnyCount;
@@ -201,6 +301,33 @@ namespace CareerStories.Controllers
         [ActionName("Story")]
         public ActionResult StoryPost()
         {
+            if (RouteData.Values["slug"] == null)
+            {
+                return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString());
+            }
+
+            //sanitize url for careername (again), id, AND slug.
+            string inputUrlParam;
+            string cleanUrlParam;
+
+            inputUrlParam = RouteData.Values["careerName"].ToString();
+            cleanUrlParam = URLFriendly(inputUrlParam);
+
+            if (!inputUrlParam.Equals(cleanUrlParam))
+            {//use StringBuilder here for optimization
+                return Redirect(@"~\" + "careers/" + cleanUrlParam + "/" + RouteData.Values["Id"].ToString() + "/"
+                    + RouteData.Values["slug"].ToString());
+            }
+
+            inputUrlParam = RouteData.Values["slug"].ToString();
+            cleanUrlParam = URLFriendly(inputUrlParam);
+
+            if (!inputUrlParam.Equals(cleanUrlParam))
+            {//use StringBuilder here for optimization
+                return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString() + "/" + RouteData.Values["Id"].ToString() + "/"
+                    + cleanUrlParam);
+            }
+
             //Add post/reply to db.
 
             return Story(); //return the getStory action so that the new reply or post will be shown.

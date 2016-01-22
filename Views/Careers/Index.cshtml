@@ -63,4 +63,27 @@
             <p>9 comments</p>
         </div>
     </div>
+
+    @foreach (var item in ViewBag.careerStoriesList)
+        {
+        <table>
+            <tr>
+                <td>
+                    @item.StarCount stars
+                </td>
+                <td>
+                    @item.CareerName
+                </td>
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    @item.PostDate
+                </td>
+                <td>
+                    @item.PostCount comments
+                </td>
+            </tr>
+        </table>
+        }
 </div>

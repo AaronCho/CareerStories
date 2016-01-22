@@ -7,6 +7,8 @@ namespace CareerStories.Models
 {
     public class StoriesViewModel
     {
+        public string CareerName { get; set; }
+
         public long StarCount { get; set; }
 
         public long PostCount { get; set; }
