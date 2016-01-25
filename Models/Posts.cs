@@ -15,7 +15,7 @@ namespace CareerStories.Models
         public long StoryId { get; set; }
 
         [Required]
-        public long UserId { get; set; }
+        public string UserId { get; set; }
 
         [Required]
         public long ReplyCount { get; set; }
@@ -24,15 +24,14 @@ namespace CareerStories.Models
         public long LikeCount { get; set; }
 
         [Required]
-        [DataType(DataType.DateTime)]
-        public DateTime PostDate { get; set; }
+        public string PostDate { get; set; }
 
         [Required]
         public string Username { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
-        [StringLength(maximumLength: 5000, MinimumLength = 3)]
+        [StringLength(maximumLength: 5000, MinimumLength = 3, ErrorMessage = "Your comment must be between 3 and 5000 characters.")]
         public string Post { get; set; }
 
         [Required]

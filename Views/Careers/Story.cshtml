@@ -6,8 +6,10 @@
 <div class="jumbotron">
     @Html.Raw(Model.CareerName) <br />
     @Html.Raw(Model.Title) <br />
+    written by: @Html.Raw(Model.Username) <br />
     @Html.Raw(Model.Education) <br />
     @Html.Raw(Model.Company) <br />
+    @Html.Raw(Model.Salary) <br />
     @Html.Raw(Model.Story) <br />
     @Html.Raw(Model.PostDate) <br />
     Comments: <br />
@@ -19,6 +21,9 @@
                     @item.PostDate
                 </td>
                 <td>
+                    written by: @item.Username
+                </td>
+                <td>
                     @item.Post
                 </td>
             </tr>
@@ -26,8 +31,13 @@
     }
 
     @using (Html.BeginForm("Story", "Careers"))
-    {
+    {       
         var PostsViewModel = new CareerStories.Models.PostsViewModel();
         @Html.Partial("_PostComment", PostsViewModel)
+        @Html.AntiForgeryToken()
     }
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

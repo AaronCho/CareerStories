@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace CareerStories.Controllers
 {
+    [AllowAnonymous]
     public class AboutController : Controller
     {
         //

@@ -27,6 +27,9 @@ namespace CareerStories.Models
 
         public string Company { get; set; }
 
-        public DateTime PostDate { get; set; }
+        public string Salary { get; set; }
+
+        public string PostDate { get; set; }
+
     }
 }

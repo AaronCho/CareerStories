@@ -18,21 +18,20 @@ namespace CareerStories.Models
         public long PostId { get; set; }
 
         [Required]
-        public long UserId { get; set; }
+        public string UserId { get; set; }
 
         [Required]
         public long LikeCount { get; set; }
 
         [Required]
-        [DataType(DataType.DateTime)]
-        public DateTime PostDate { get; set; }
+        public string PostDate { get; set; }
 
         [Required]
         public string Username { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
-        [StringLength(maximumLength: 5000, MinimumLength = 3)]
+        [StringLength(maximumLength: 5000, MinimumLength = 3, ErrorMessage = "Your reply must be between 3 and 5000 characters.")]
         public string Reply { get; set; }
 
         [Required]

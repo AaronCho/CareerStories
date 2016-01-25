@@ -1,7 +1,9 @@
 ﻿using CareerStories.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -93,6 +95,7 @@ namespace CareerStories.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [ActionName("Index")] //if the signature changes, you can comment this line out
         public ActionResult IndexPost()
         {
@@ -101,6 +104,7 @@ namespace CareerStories.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult Create()
         {
             //sanitize url
@@ -152,6 +156,8 @@ namespace CareerStories.Controllers
         }
 
         [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(StoriesCreateViewModel viewModelStories) //Look into ViewModels, more work but may be worth it.
         {
             //sanitize url
@@ -199,6 +205,22 @@ namespace CareerStories.Controllers
             }
             ////////////////////////end redirect check/////////////////////////////////////////////
 
+            //This is how you get the current user id.
+            string userId = "";
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            if (claimsIdentity != null)
+            {
+                // the principal identity is a claims identity.
+                // now we need to find the NameIdentifier claim
+                var userIdClaim = claimsIdentity.Claims
+                    .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+
+                if (userIdClaim != null)
+                {
+                    userId = userIdClaim.Value;
+                }
+            }
+
             Stories stories = new Stories();
 
             stories.Title = viewModelStories.Title;
@@ -208,10 +230,10 @@ namespace CareerStories.Controllers
 
             stories.CareerId = getCareerId(RouteData.Values["careerName"].ToString().Replace("-", " "));
             stories.CareerName = RouteData.Values["careerName"].ToString().Replace("-", " ");
-            stories.UserId = 5; //MUST CHANGE to current user id!
-            stories.Username = "aaron";
+            stories.UserId = userId; //MUST CHANGE to current user id!
+            stories.Username = User.Identity.Name;
 
-            stories.PostDate = DateTime.Now; //account for time difference
+            stories.PostDate = DateTime.Now.ToString("MM/dd/yyyy h:mm tt"); //account for time difference
             stories.StarCount = 0;
             stories.PostCount = 0;
             stories.FunnyCount = 0;
@@ -258,16 +280,7 @@ namespace CareerStories.Controllers
                 return Redirect(@"~\" + "careers/" + cleanUrlParam + "/" + RouteData.Values["Id"].ToString() + "/"
                     + RouteData.Values["slug"].ToString());
             }
-
-            /*inputUrlParam = RouteData.Values["slug"].ToString();
-            cleanUrlParam = URLFriendly(inputUrlParam);
-
-            if (!inputUrlParam.Equals(cleanUrlParam))
-            {//use StringBuilder here for optimization
-                return Redirect(@"~\" + "careers/" + cleanUrlParam + "/" + RouteData.Values["Id"].ToString() + "/"
-                    + RouteData.Values["slug"].ToString());
-            }*/
-
+           
             if (!RouteData.Values["slug"].ToString().Equals(getSlug(Int64.Parse(RouteData.Values["Id"].ToString())))) {
                 return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString() + "/" + RouteData.Values["Id"].ToString() + "/" + getSlug(Int64.Parse(RouteData.Values["Id"].ToString())));
             }
@@ -287,10 +300,12 @@ namespace CareerStories.Controllers
             storiesViewModel.PostCount = story[0].PostCount;
             storiesViewModel.FunnyCount = story[0].FunnyCount;
             storiesViewModel.InformativeCount = story[0].InformativeCount;
+            storiesViewModel.Username = story[0].Username;
             storiesViewModel.Story = story[0].Story;
             storiesViewModel.Title = story[0].Title;
             storiesViewModel.Education = story[0].Education;
             storiesViewModel.Company = story[0].Company;
+            storiesViewModel.Salary = story[0].Salary;
             storiesViewModel.PostDate = story[0].PostDate;
             
             ///////////////////////////////
@@ -298,24 +313,43 @@ namespace CareerStories.Controllers
              * in the View.
              * */
             var PostsList = db.Posts.Where(u => u.IsActive == 1 && u.StoryId == inputId).OrderBy(u => u.PostDate).ToList();
-            ViewBag.PostsList = PostsList;
+            ViewBag.PostsList = PostsList; 
             ///////////////////////////////
             return View(storiesViewModel);
         }
 
         [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
         [ActionName("Story")]
         public ActionResult StoryPost(PostsViewModel viewModelPosts)
         {
-           //Don't do any redirects, the slug is null when form is posted.
+            //Don't do any redirects, the slug is null when form is posted.
+
+        
+            //This is how you get the current user id.
+            string userId = "";
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            if (claimsIdentity != null)
+            {
+                // the principal identity is a claims identity.
+                // now we need to find the NameIdentifier claim
+                var userIdClaim = claimsIdentity.Claims
+                    .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+
+                if (userIdClaim != null)
+                {
+                    userId = userIdClaim.Value;
+                }
+            }
 
             Posts posts = new Posts();
             posts.StoryId = Int64.Parse(RouteData.Values["Id"].ToString()); //what if user changes id parameter in url then presses post??
-            posts.UserId = 5;
-            posts.Username = "aaron";
+            posts.UserId = userId;
+            posts.Username = User.Identity.Name;
             posts.ReplyCount = 0;
             posts.LikeCount = 0;
-            posts.PostDate = DateTime.Now;
+            posts.PostDate = DateTime.Now.ToString("MM/dd/yyyy h:mm tt");
             posts.Post = viewModelPosts.Post;
             posts.IsActive = 1;
 
@@ -325,6 +359,13 @@ namespace CareerStories.Controllers
                 var db = new CareersDataContext();
                 db.Posts.Add(posts);
                 db.SaveChanges();
+
+                //increment post count for current story
+                var story = db.Stories.Find(Int64.Parse(RouteData.Values["Id"].ToString()));
+                story.PostCount += 1;
+                db.Entry(story).State = EntityState.Modified;
+                db.SaveChanges();
+
 
                 //use StringBuilder here for optimization
                 return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString() + "/" + RouteData.Values["Id"].ToString() + "/" + getSlug(posts.StoryId));
@@ -353,7 +394,14 @@ namespace CareerStories.Controllers
             var db = new CareersDataContext();
             var careers = db.Careers.Where(x => string.Equals(x.CareerName, careerName)).ToArray();
 
-            careerId = careers[0].Id;
+            if (careerName == "" || careerName == null)
+            {
+                careerId = 1;
+            }
+            else
+            {
+                careerId = careers[0].Id;
+            }
 
             return careerId;
         }

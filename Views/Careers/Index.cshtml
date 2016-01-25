@@ -15,6 +15,7 @@
             
             {
                 @Html.DropDownList("careersList", null, new { @onchange = "this.form.submit()" })
+                @Html.AntiForgeryToken()
             }         
 </p>
     <input id="searchInput" name="careerSearch" type="text">
@@ -48,10 +49,20 @@
     {
         @*Try Url.Action again for formatting with <a> and <td>*@
         @*USE THIS: http://stackoverflow.com/questions/9584673/html-actionlink-and-html-displayfor-at-the-same-time-not-right-but-it-descri*@
+        string commentString;
+        if (item.PostCount == 1)
+        {
+            commentString = " comment"; 
+        }
+        else
+        {
+            commentString = " comments";
+        }
+                       
         <table>
             <tr>
                 <td>
-                    @Html.ActionLink(item.StarCount + "stars" + "\t" + item.CareerName + "\t" + item.Title + "\t" + item.PostDate + "\t" + item.PostCount + " comments", "Story", "Careers", new { Id = item.Id }, null /* html attributes */)
+                    @Html.ActionLink(item.StarCount + "stars" + "\t" + item.CareerName + "\t" + item.Title + "\t" + item.PostDate + "\t" + item.Username + "\t" + item.PostCount + commentString, "Story", "Careers", new { Id = item.Id }, null /* html attributes */)
                 </td>
             </tr>
         </table>       

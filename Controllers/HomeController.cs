@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace CareerStories.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         public ActionResult Index()
