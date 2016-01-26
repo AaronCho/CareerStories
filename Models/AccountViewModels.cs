@@ -31,7 +31,7 @@ namespace CareerStories.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "User name")]
+        [Display(Name = "Username")]
         public string UserName { get; set; }
 
         [Required]
@@ -39,14 +39,15 @@ namespace CareerStories.Models
         [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Stay signed in")]
         public bool RememberMe { get; set; }
     }
 
     public class RegisterViewModel
     {
         [Required]
-        [Display(Name = "User name")]
+        [StringLength(maximumLength: 20, MinimumLength = 3, ErrorMessage = "The {0} must be between 3 and 20 characters.")]
+        [Display(Name = "Username")]
         public string UserName { get; set; }
 
         [Required]

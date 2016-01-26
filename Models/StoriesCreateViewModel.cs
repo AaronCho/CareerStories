@@ -13,16 +13,23 @@ namespace CareerStories.Models
         public string Story { get; set; }
 
         [Required]
-        [StringLength(maximumLength: 200, MinimumLength = 3, ErrorMessage = "The Title must be between 3 and 200 characters")]
+        [StringLength(maximumLength: 60, MinimumLength = 3, ErrorMessage = "The Title must be between 3 and 60 characters")]
         public string Title { get; set; }
 
-        [StringLength(maximumLength: 100, MinimumLength = 0, ErrorMessage = "The Education field must be less than 200 characters")]
+        [Display(Name = "Education (Optional)")]
+        [StringLength(maximumLength: 100, MinimumLength = 0, ErrorMessage = "The Education field must be less than 100 characters")]
         public string Education { get; set; }
 
-        [StringLength(maximumLength: 100, MinimumLength = 0, ErrorMessage = "The Company field must be less than 200 characters")]
+        [Display(Name = "Company (Optional)")]
+        [StringLength(maximumLength: 100, MinimumLength = 0, ErrorMessage = "The Company field must be less than 100 characters")]
         public string Company { get; set; }
 
-        [StringLength(maximumLength: 100, MinimumLength = 0, ErrorMessage = "The Salary field must be less than 200 characters")]
+        [Display(Name = "Salary (Optional)")]
+        [StringLength(maximumLength: 100, MinimumLength = 0, ErrorMessage = "The Salary field must be less than 100 characters")]
         public string Salary { get; set; }
+
+        [Display(Name = "Location (Optional)")]
+        [StringLength(maximumLength: 100, MinimumLength = 0, ErrorMessage = "The Location field must be less than 100 characters")]
+        public string Location { get; set; }
     }
 }

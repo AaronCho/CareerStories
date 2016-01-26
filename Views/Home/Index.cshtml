@@ -10,52 +10,33 @@
 <div class="loner">
     <h2>Top Stories</h2>
 </div>
-
-<div class="jumbotron">
-    <div class="row">
-        <div class="col-md-2">
-            <p>41 stars</p>
-            <p>14 stars</p>
-            <p>8 stars</p>
-        </div>
-        <div class="col-md-2">
-            <p>Accountant</p>
-            <p>Pharmacist</p>
-            <p>High School Teacher</p>
-        </div>
-        <div class="col-md-2">
-            <p>Passing the CPA exam is hard, and there a lot of...</p>
-            <p>The customers are hard to deal with...</p>
-            <p>You have no energy at the end of the...</p>
-        </div>
-        <div class="col-md-2">
-            <p>31 comments</p>
-            <p>18 comments</p>
-            <p>2 comments</p>
-        </div>
-    </div>
-
-    @foreach (var item in ViewBag.careerStoriesListHome as List<CareerStories.Models.Stories>)
-    {
-        @*Try Url.Action again for formatting with <a> and <td>*@
-        @*USE THIS: http://stackoverflow.com/questions/9584673/html-actionlink-and-html-displayfor-at-the-same-time-not-right-but-it-descri*@
-        
-        string commentString;
-        if (item.PostCount == 1)
+<div class="container-fluid">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Career</th>
+                <th>Title</th>
+                <th>User</th>
+                <th>Comments</th>
+            </tr>
+        </thead>       
+        @foreach (var item in ViewBag.careerStoriesListHome as List<CareerStories.Models.Stories>)
         {
-            commentString = " comment";
-        }
-        else
-        {
-            commentString = " comments";
-        }
-        
-        <table>
             <tr>
                 <td>
-                    @Html.ActionLink(item.StarCount + "stars" + "\t" + item.CareerName + "\t" + item.Title + "\t" + item.PostDate + "\t" + item.Username + "\t" + item.PostCount + commentString, "Story", "Careers", new { Id = item.Id }, null /* html attributes */)
+                    @item.CareerName
+                </td>
+                <td>
+                    @Html.ActionLink(item.Title, "Story", "Careers", new { Id = item.Id }, null /* html attributes */)
+                </td>
+                <td>
+                    @item.Username
+                </td>
+                <td>
+                    <span class="badge">@item.PostCount</span>
                 </td>
             </tr>
-        </table>
-    }  
+
+        }
+    </table>
 </div>

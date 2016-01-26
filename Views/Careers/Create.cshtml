@@ -3,38 +3,60 @@
     ViewBag.Title = "Create";
 }
 
-<div class = "jumbotron">
-    @using (Html.BeginForm("Create", "Careers"))
-    {
-        <p>
-            Write your story.  Stories should be descriptive and give others inside information about your career.
-        </p>
-        @Html.ValidationSummary(true) <!-- Theres other validation message stuff watch lynda 6.1-->
-
-        @Html.Label("Title: ")
-        @Html.EditorFor(model => model.Title)
-        @Html.ValidationMessageFor(model => model.Title) <br />
-
-        @Html.Label("Education (Optional): ")
-        @Html.EditorFor(model => model.Education)
-        @Html.ValidationMessageFor(model => model.Education) <br />
-
-        @Html.Label("Company (Optional): ")
-        @Html.EditorFor(model => model.Company)
-        @Html.ValidationMessageFor(model => model.Company) <br />
-        
-        @Html.Label("Salary (Optional):")
-        @Html.EditorFor(model => model.Salary)
-        @Html.ValidationMessageFor(model => model.Salary) <br />
-
-        @Html.Label("Story: ")
-        @Html.TextAreaFor(model => model.Story, 20, 30, htmlAttributes: new { style = "width: 100%; max-width: 100%;" }) @*The 20 and 30 are the sizes*@
-        @Html.ValidationMessageFor(model => model.Story) <br />
-
-        <input type="submit" class="btn btn-primary btn-large" value="Create" />
-        @Html.AntiForgeryToken()
-    }
-</div>
+@using (Html.BeginForm("Create", "Careers", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Write your story.  Stories should be descriptive and give others inside information about your career.</h4>
+    <hr />
+    @Html.ValidationSummary()
+    <div class="form-group">
+        @Html.LabelFor(m => m.Title, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Title)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Education, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Education, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Education)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Company, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Company, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Company)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Salary, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Salary, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Salary)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Location, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Location, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Location)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Story, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(m => m.Story, htmlAttributes: new { @class = "form-control", style = "width: 85%; max-width: 85%;", rows = 25 }) 
+            @Html.ValidationMessageFor(model => model.Story)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-primary btn-large" value="Create" />
+        </div>
+    </div>                     
+}
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

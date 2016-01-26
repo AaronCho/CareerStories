@@ -90,7 +90,7 @@ namespace CareerStories.Controllers
             //get stories from selected career, sort, and put in viewbag.
             var careerStoriesList = db.Stories.Where(u => u.IsActive == 1 && u.CareerId == careerId).OrderByDescending(u => u.StarCount).ToList();
             ViewBag.careerStoriesList = careerStoriesList;
-
+         
             return View(careersViewModel);
         }
 
@@ -226,6 +226,8 @@ namespace CareerStories.Controllers
             stories.Title = viewModelStories.Title;
             stories.Education = viewModelStories.Education;
             stories.Company = viewModelStories.Company;
+            stories.Salary = viewModelStories.Salary;
+            stories.Location = viewModelStories.Location;
             stories.Story = viewModelStories.Story;
 
             stories.CareerId = getCareerId(RouteData.Values["careerName"].ToString().Replace("-", " "));
@@ -294,7 +296,7 @@ namespace CareerStories.Controllers
             {//wrong id
                 return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString()); 
             }
-
+            
             storiesViewModel.CareerName = story[0].CareerName;
             storiesViewModel.StarCount = story[0].StarCount;
             storiesViewModel.PostCount = story[0].PostCount;
@@ -306,6 +308,7 @@ namespace CareerStories.Controllers
             storiesViewModel.Education = story[0].Education;
             storiesViewModel.Company = story[0].Company;
             storiesViewModel.Salary = story[0].Salary;
+            storiesViewModel.Location = story[0].Location;
             storiesViewModel.PostDate = story[0].PostDate;
             
             ///////////////////////////////

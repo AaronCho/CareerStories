@@ -29,6 +29,8 @@ namespace CareerStories.Models
 
         public string Salary { get; set; }
 
+        public string Location { get; set; }
+
         public string PostDate { get; set; }
 
     }

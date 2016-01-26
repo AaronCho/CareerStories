@@ -3,69 +3,58 @@
 @{
     ViewBag.Title = "Careers";
 }
-
 <div class="jumbotron">
     <p>
-        Careers:
-
-            @Html.ActionLink("New Story", "Create", "Careers", null, new { @class = "btn btn-primary btn-large" })
-            <!--Difference between actionlink and routelink: http://stackoverflow.com/questions/864827/whats-the-difference-between-routelink-and-actionlink-in-asp-net-mvc-->
-            @*@Html.DropDownListFor(model => model.CareerName, Model.Careers) uses the viewmodel*@
-            @using (Html.BeginForm("Index", "Careers"))
-            
-            {
-                @Html.DropDownList("careersList", null, new { @onchange = "this.form.submit()" })
-                @Html.AntiForgeryToken()
-            }         
-</p>
-    <input id="searchInput" name="careerSearch" type="text">
-    <a href="http://www.google.com" class="btn btn-primary btn-large">Search</a> <br />
-
-    <p>@ViewBag.Message</p>
+        @Html.ActionLink("New Story", "Create", "Careers", null, new { @class = "btn btn-primary btn-large" })
+        <!--Difference between actionlink and routelink: http://stackoverflow.com/questions/864827/whats-the-difference-between-routelink-and-actionlink-in-asp-net-mvc-->
+        @*@Html.DropDownListFor(model => model.CareerName, Model.Careers) uses the viewmodel*@
+        @using (Html.BeginForm("Index", "Careers"))            
+        {
+            @Html.DropDownList("careersList", null, new { @onchange = "this.form.submit()" })
+            @Html.AntiForgeryToken()
+        }         
+    </p>
     <p>
         @*<img src="@Url.Content(Model.ImageUrl)" alt=""> the url.content breaks page if imageurl is null (contentpath).  maybe dont use imageurl*@
-        @Html.Raw(Model.Description)
+        @*@@Html.Raw(Model.Description)*@
     </p>
-    <p><h1>Stories:</h1></p>
-    <div class="row">
-        <div class="col-md-2">
-            <p>11 stars</p>
-            <p>3 stars</p>
-            <p>2 stars</p>
-        </div>
-        <div class="col-md-2">
-            <p>Being an administrative assistant is hard...</p>
-            <p>The boss can be hard to deal with...</p>
-            <p>There is no future in this career...</p>
-        </div>
-        <div class="col-md-2">
-            <p>15 comments</p>
-            <p>11 comments</p>
-            <p>9 comments</p>
-        </div>
-    </div>
+</div> 
+<div class="container-fluid">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Career</th>
+                <th>Title</th>
+                <th>User</th>
+                <th>Comments</th>
+            </tr>
+        </thead>
+        @{
+            if (ViewBag.careerStoriesList.Count == 0)
+            {
+                <p>There are currently no stories for this career.  Be the first!</p>
+            }
+        }
 
-    @foreach (var item in ViewBag.careerStoriesList as List<CareerStories.Models.Stories>)
-    {
-        @*Try Url.Action again for formatting with <a> and <td>*@
-        @*USE THIS: http://stackoverflow.com/questions/9584673/html-actionlink-and-html-displayfor-at-the-same-time-not-right-but-it-descri*@
-        string commentString;
-        if (item.PostCount == 1)
-        {
-            commentString = " comment"; 
-        }
-        else
-        {
-            commentString = " comments";
-        }
-                       
-        <table>
+        @foreach (var item in ViewBag.careerStoriesList as List<CareerStories.Models.Stories>)
+        {          
             <tr>
                 <td>
-                    @Html.ActionLink(item.StarCount + "stars" + "\t" + item.CareerName + "\t" + item.Title + "\t" + item.PostDate + "\t" + item.Username + "\t" + item.PostCount + commentString, "Story", "Careers", new { Id = item.Id }, null /* html attributes */)
+                    @item.CareerName
+                </td>
+                <td>
+                    @Html.ActionLink(item.Title, "Story", "Careers", new { Id = item.Id }, null /* html attributes */)
+                </td>
+                <td>
+                    @item.Username
+                </td>
+                <td>
+                    <span class="badge">@item.PostCount</span>                   
                 </td>
             </tr>
-        </table>       
-    }  
-        
+                
+        }
+    </table>
 </div>
+
+
