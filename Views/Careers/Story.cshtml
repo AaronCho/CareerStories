@@ -3,42 +3,112 @@
     ViewBag.Title = "Story";
 }
 
-<div class="jumbotron">
-    @Html.Raw(Model.CareerName) <br />
-    @Html.Raw(Model.Title) <br />
-    written by: @Html.Raw(Model.Username) <br />
-    @Html.Raw(Model.Education) <br />
-    @Html.Raw(Model.Company) <br />
-    @Html.Raw(Model.Salary) <br />
-    @Html.Raw(Model.Location) <br />
-    @Html.Raw(Model.Story) <br />
-    @Html.Raw(Model.PostDate) <br />
-    Comments: <br />
+
+@*@Html.Raw(Model.CareerName) <br />
+@Html.Raw(Model.Title) by: @Html.Raw(Model.Username) <br />
+@Html.Raw(Model.Education) <br />
+@Html.Raw(Model.Company) <br />
+@Html.Raw(Model.Salary) <br />
+@Html.Raw(Model.Location) <br />
+@Html.Raw(Model.Story) <br />
+@Html.Raw(Model.PostDate) <br />
+Comments: <br />
+@foreach (var item in ViewBag.PostsList)
+{
+    <table>
+        <tr>
+            <td>
+                @item.PostDate
+            </td>
+            <td>
+                written by: @item.Username
+            </td>
+            <td>
+                @item.Post
+            </td>
+        </tr>
+    </table>
+}
+
+@using (Html.BeginForm("Story", "Careers"))
+{       
+    var PostsViewModel = new CareerStories.Models.PostsViewModel();
+    @Html.Partial("_PostComment", PostsViewModel)
+    @Html.AntiForgeryToken()
+}*@
+@*                                                                                 *@
+<div class="well">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-2">
+                <h4>@Html.Raw(Model.Title)</h4>
+            </div>
+        </div><br />
+        <div class="row">
+            <div class="col-md-6">
+                By: <strong>@Html.Raw(Model.Username)</strong>
+            </div>
+            <div class="col-md-6">
+                @Html.Raw(Model.PostDate)
+            </div>
+        </div><br />
+        <div class="row">
+            <div class="col-md-6">
+                <u>Education</u>: @Html.Raw(Model.Education)
+            </div>
+            <div class="col-md-6">
+                <u>Company</u>: @Html.Raw(Model.Company)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <u>Salary</u>: @Html.Raw(Model.Salary)
+            </div>
+            <div class="col-md-6">
+                <u>Location</u>: @Html.Raw(Model.Location)
+            </div>
+        </div><br />
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Raw(Model.Story)
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Comment</th>
+            <th>User</th>
+            <th>Date</th>
+        </tr>
+    </thead>
     @foreach (var item in ViewBag.PostsList)
     {
-        <table>
-            <tr>
-                <td>
-                    @item.PostDate
-                </td>
-                <td>
-                    written by: @item.Username
-                </td>
-                <td>
-                    @item.Post
-                </td>
-            </tr>
-        </table>
-    }
 
+        <tr>
+            <td>
+                @item.Post
+            </td>
+            <td>
+                <strong>@item.Username</strong>
+            </td>
+            <td>
+                @item.PostDate
+            </td>
+        </tr>
+
+    }
+</table>
     @using (Html.BeginForm("Story", "Careers"))
-    {       
+    {
         var PostsViewModel = new CareerStories.Models.PostsViewModel();
         @Html.Partial("_PostComment", PostsViewModel)
         @Html.AntiForgeryToken()
     }
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+    
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

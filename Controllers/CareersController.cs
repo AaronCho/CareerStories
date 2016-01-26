@@ -88,7 +88,7 @@ namespace CareerStories.Controllers
             }
 
             //get stories from selected career, sort, and put in viewbag.
-            var careerStoriesList = db.Stories.Where(u => u.IsActive == 1 && u.CareerId == careerId).OrderByDescending(u => u.StarCount).ToList();
+            var careerStoriesList = db.Stories.Where(u => u.IsActive == 1 && u.CareerId == careerId).OrderByDescending(u => u.PostCount).ToList();
             ViewBag.careerStoriesList = careerStoriesList;
          
             return View(careersViewModel);
