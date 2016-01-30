@@ -265,9 +265,14 @@ namespace CareerStories.Controllers
         [HttpGet]
         public ActionResult Story()
         {
+            var db = new CareersDataContext();
+            var storiesViewModel = new StoriesViewModel();
+            long inputId = Int64.Parse(RouteData.Values["Id"].ToString());
+            var story = db.Stories.Where(x => x.Id == inputId).ToArray();
+
             if (RouteData.Values["slug"] == null)
             {
-                return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString() + "/" + RouteData.Values["Id"].ToString() + "/" + getSlug(Int64.Parse(RouteData.Values["Id"].ToString())));
+                return Redirect(@"~\" + "careers/" + story[0].CareerName + "/" + RouteData.Values["Id"].ToString() + "/" + getSlug(Int64.Parse(RouteData.Values["Id"].ToString())));
             }
 
             //sanitize url for careername (again), id, AND slug.
@@ -286,11 +291,6 @@ namespace CareerStories.Controllers
             if (!RouteData.Values["slug"].ToString().Equals(getSlug(Int64.Parse(RouteData.Values["Id"].ToString())))) {
                 return Redirect(@"~\" + "careers/" + RouteData.Values["careerName"].ToString() + "/" + RouteData.Values["Id"].ToString() + "/" + getSlug(Int64.Parse(RouteData.Values["Id"].ToString())));
             }
-
-            var db = new CareersDataContext();
-            var storiesViewModel = new StoriesViewModel();
-            long inputId = Int64.Parse(RouteData.Values["Id"].ToString());
-            var story = db.Stories.Where(x => x.Id == inputId).ToArray();
 
             if (story.Length < 1)
             {//wrong id
