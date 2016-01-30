@@ -15,7 +15,7 @@ namespace CareerStories.Controllers
             var db = new CareersDataContext();
             var careerStoriesList = db.Stories.Where(u => u.IsActive == 1).OrderByDescending(u => u.PostCount).ToList();
             ViewBag.careerStoriesListHome = careerStoriesList;
-
+       
             return View();
         }
     }

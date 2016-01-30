@@ -6,6 +6,7 @@ using System.Web;
 
 namespace CareerStories.Models
 {
+    //how to change database schema: http://www.asp.net/mvc/overview/older-versions-1/getting-started-with-mvc/getting-started-with-mvc-part8
     public class Stories
     {
         [Required]
@@ -61,6 +62,6 @@ namespace CareerStories.Models
         public string PostDate { get; set; }
 
         [Required]
-        public int IsActive { get; set; }
+        public int IsActive { get; set; }       
     }
 }

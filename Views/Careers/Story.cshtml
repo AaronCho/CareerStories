@@ -3,40 +3,6 @@
     ViewBag.Title = "Story";
 }
 
-
-@*@Html.Raw(Model.CareerName) <br />
-@Html.Raw(Model.Title) by: @Html.Raw(Model.Username) <br />
-@Html.Raw(Model.Education) <br />
-@Html.Raw(Model.Company) <br />
-@Html.Raw(Model.Salary) <br />
-@Html.Raw(Model.Location) <br />
-@Html.Raw(Model.Story) <br />
-@Html.Raw(Model.PostDate) <br />
-Comments: <br />
-@foreach (var item in ViewBag.PostsList)
-{
-    <table>
-        <tr>
-            <td>
-                @item.PostDate
-            </td>
-            <td>
-                written by: @item.Username
-            </td>
-            <td>
-                @item.Post
-            </td>
-        </tr>
-    </table>
-}
-
-@using (Html.BeginForm("Story", "Careers"))
-{       
-    var PostsViewModel = new CareerStories.Models.PostsViewModel();
-    @Html.Partial("_PostComment", PostsViewModel)
-    @Html.AntiForgeryToken()
-}*@
-@*                                                                                 *@
 <div class="well">
     <div class="container">
         <div class="row">
@@ -70,7 +36,7 @@ Comments: <br />
         </div><br />
         <div class="row">
             <div class="col-md-12">
-                @Html.Raw(Model.Story)
+                @Html.Raw(Model.Story.Replace(Environment.NewLine, "<br />"))
             </div>
         </div>
     </div>

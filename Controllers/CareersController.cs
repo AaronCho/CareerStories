@@ -54,7 +54,7 @@ namespace CareerStories.Controllers
            
             //var list = db.Careers.ToList();
             long careerId = 1;
-            var list = db.Careers.Where(u => u.IsActive == 1).ToList();
+            var list = db.Careers.Where(u => u.IsActive == 1).OrderBy(u => u.CareerName).ToList();
             List<SelectListItem> careersList = new List<SelectListItem>();
 
             for (int i = 0; i < list.Count(); i++)
