@@ -235,7 +235,7 @@ namespace CareerStories.Controllers
             stories.UserId = userId; //MUST CHANGE to current user id!
             stories.Username = User.Identity.Name;
 
-            stories.PostDate = DateTime.Now.ToString("MM/dd/yyyy h:mm tt"); //account for time difference
+            stories.PostDate = DateTime.Now.ToString("M/dd/yy"); //account for time difference
             stories.StarCount = 0;
             stories.PostCount = 0;
             stories.FunnyCount = 0;
